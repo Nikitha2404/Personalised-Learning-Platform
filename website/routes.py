@@ -9,10 +9,8 @@ def db_conn():
 
 @app.route('/')
 def index():
-    conn = db_conn()
-    print(conn)
-    cur = conn.cursor()
-    return 'Hello'
+    return render_template('course.html')
+
 
 
 
