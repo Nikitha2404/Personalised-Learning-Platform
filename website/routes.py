@@ -8,9 +8,35 @@ def db_conn():
     return conn
 
 @app.route('/')
-def index():
-    return render_template('course.html')
+def course():
+
+    conn = db_conn()
+    cur = conn.cursor()
+
+    select_query = f'''SELECT * FROM course;'''
+    cur.execute(select_query)
+    data = cur.fetchall()
+
+    return render_template('course.html',data=data)
+
+@app.route('/11')
+def syllogisum():
+     
+    conn = db_conn()
+    cur = conn.cursor()
+
+    select_query = f'''SELECT * FROM lesson where course_id=11;'''
+    cur.execute(select_query)
+    data = cur.fetchall()
+
+    return render_template('lesson.html',data=data)
 
 
+@app.route('/111')
+def syllogisuml1():
+     
+    return render_template('material.html')
 
-
+@app.route('/quiz')
+def quiz():
+    return render_template('quiz.html')
