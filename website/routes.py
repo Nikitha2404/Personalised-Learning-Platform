@@ -39,4 +39,12 @@ def syllogisuml1():
 
 @app.route('/quiz')
 def quiz():
-    return render_template('quiz.html')
+
+    conn = db_conn()
+    cur = conn.cursor()
+
+    select_query = f'''SELECT * FROM questionbank where lesson_id=1;'''
+    cur.execute(select_query)
+    data = cur.fetchall()
+
+    return render_template('quiz.html',data=data)
