@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='lessons.css') }}">
+  <title>Course Lessons</title>
+</head>
+<body>
+<h1></h1>
+
+<div id="progress-bar">
+  <div id="progress-bar-fill" style="width: 30%;"></div>
+</div>
+
+<div id="lessons-container">
+  {% for row in data %}
+  <div class="lesson-card">
+    <h3><a href="{{ url_for('getMaterial', CourseId=row[4], LessonId=row[0]) }}">{{ row[1] }}</a></h3>
+  </div>
+  {% endfor %}
+</div>
+
+</body>
+</html>
