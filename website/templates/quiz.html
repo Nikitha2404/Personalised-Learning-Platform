@@ -3,178 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz App</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #e5e7e72d;
+      background-color: #f2f2f2; /* Pale grey background */
       color: #333;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     #quiz-container {
-      background-color: #8c9aa744;
+      background-color: #ffffff; /* White background for the quiz container */
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
+      padding: 20px;
       width: 400px;
-    }
-
-    #question-container {
-      padding: 20px;
       text-align: center;
-      border-bottom: 1px solid #454496;
     }
 
-    #options-container {
-      padding: 20px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-
-    .options-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .options-list li {
+    .question {
+      font-size: 1.2em;
       margin-bottom: 10px;
     }
 
-    button {
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
       padding: 10px;
-      margin: 5px;
-      cursor: pointer;
-      border: none;
+      border: 1px solid #3498db; /* Blue border for options */
       border-radius: 5px;
-      font-size: 16px;
+      cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
-    button:hover {
-      background-color: #ddd;
-    }
-
-    #result-container {
-      text-align: center;
-      display: none;
-      padding: 20px;
+    .option:hover {
+      background-color: #3498db; /* Blue background on hover */
+      color: #fff;
     }
   </style>
-  <title>Quiz App</title>
 </head>
 <body>
 
-<div id="quiz-container">
-  <div id="question-container">
-    <h2 id="question">Question 1:</h2>
+  <div id="quiz-container">
+    {% for row in data %}
+      <div class="question">{{ row[1] }}</div>
+      <div class="options">
+        <div class="option" onclick="checkAnswer('{{ row[2] }}')">A. {{ row[2] }}</div>
+        <div class="option" onclick="checkAnswer('{{ row[3]  }}')">B. {{ row[3] }}</div>
+        <div class="option" onclick="checkAnswer('{{ row[4] }}')">C. {{ row[4] }}</div>
+        <div class="option" onclick="checkAnswer('{{ row[5] }}')">D. {{ row[5] }}</div>
+        <div class="option" onclick="checkAnswer('{{ row[6] }}')">E. {{ row[6] }}</div>
+      </div>
+    {% endfor %}
   </div>
-  <div id="options-container">
-    <ul class="options-list" id="options">
-      <li><button onclick="selectOption('Option 1')">Option 1</button></li>
-      <li><button onclick="selectOption('Option 2')">Option 2</button></li>
-      <li><button onclick="selectOption('Option 3')">Option 3</button></li>
-      <li><button onclick="selectOption('Option 4')">Option 4</button></li>
-    </ul>
-    <button onclick="submitAnswer()">Submit</button>
-    <button onclick="nextQuestion()">Next</button>
-  </div>
-  <div id="result-container">
-    <h2>Quiz Result</h2>
-    <p id="result-text"></p>
-  </div>
-</div>
 
-<script>
-  let currentQuestion = 0;
-  let markedForReview = [];
-  let answers = [];
-  const questions = [
-    {
-      question: "What is the capital of Japan?",
-      options: ["Tokyo", "Seoul", "Beijing", "Bangkok"],
-      correctAnswer: "Tokyo"
-    },
-    {
-      question: "Which planet is known as the 'Red Planet'?",
-      options: ["Mars", "Venus", "Jupiter", "Saturn"],
-      correctAnswer: "Mars"
-    },
-    {
-      question: "What is the largest mammal in the world?",
-      options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
-      correctAnswer: "Blue Whale"
-    }
-  ];
-
-  const questionContainer = document.getElementById('question');
-  const optionsContainer = document.getElementById('options');
-  const resultContainer = document.getElementById('result-container');
-  const resultText = document.getElementById('result-text');
-
-  function displayQuestion() {
-    const currentQuestionData = questions[currentQuestion];
-    questionContainer.textContent = `Question ${currentQuestion + 1}: ${currentQuestionData.question}`;
-    optionsContainer.innerHTML = currentQuestionData.options.map(option =>
-      `<li><button onclick="selectOption('${option}')">${option}</button></li>`
-    ).join('');
-  }
-
-  function selectOption(selectedOption) {
-    answers[currentQuestion] = selectedOption;
-  }
-
-  function submitAnswer() {
-    if (!answers[currentQuestion]) {
-      alert("Please select an option before submitting.");
-      return;
-    }
-
-    nextQuestion();
-  }
-
-  function markForReview() {
-    if (!markedForReview.includes(currentQuestion)) {
-      markedForReview.push(currentQuestion);
-    }
-    displayQuestion();
-  }
-
-  function nextQuestion() {
-    currentQuestion++;
-    if (currentQuestion < questions.length) {
-      displayQuestion();
-    } else {
-      showResult();
-    }
-  }
-
-  function showResult() {
-    resultText.textContent = `You have completed the quiz. Your score is ${calculateScore()} out of ${questions.length}.`;
-    resultContainer.style.display = 'block';
-    document.getElementById('quiz-container').style.display = 'none';
-  }
-
-  function calculateScore() {
-    let score = 0;
-    for (let i = 0; i < questions.length; i++) {
-      if (answers[i] === questions[i].correctAnswer) {
-        score++;
-      }
-    }
-    return score;
-  }
-
-  displayQuestion();
-</script>
 
 </body>
 </html>
-
