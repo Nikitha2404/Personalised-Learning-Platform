@@ -4,7 +4,7 @@ import psycopg2
 import os
 
 def db_conn():
-    conn = psycopg2.connect(database="flaskdb", host="localhost", user="postgres",password="K$ham@29",port="5432")
+    conn = psycopg2.connect(database="postgres", host="localhost", user="postgres",password="pgpassword",port="5432")
     return conn
 
 @app.route('/')
