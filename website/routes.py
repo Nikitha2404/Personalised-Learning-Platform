@@ -66,23 +66,24 @@ def quiz():
         current_question = int(request.form['current_question'])
         user_answer = request.form['user_answer']
         correct_answer = request.form['correct_answer']
+        options = request.form['options']
         score = int(request.form['score'])
 
-        if user_answer == 'Only conclusion 1 follows':
+        if user_answer == options[0]:
             user_answer = 'A'
-        elif user_answer == 'Only conclusion 2 follows':
+        elif user_answer == options[1]:
             user_answer = 'B'
-        elif user_answer == 'Either 1 or 2 follows':
+        elif user_answer == options[2]:
             user_answer = 'C'
-        elif user_answer == 'Neither 1 nor 2 follows':
+        elif user_answer == options[3]:
             user_answer = 'D'
         else:
-            user_answer - 'E'
+            user_answer = 'E'
 
         if user_answer == correct_answer:
             score += 1
 
-        if current_question == 5:  # Assuming there are 10 questions
+        if current_question == 5:  # Assuming there are 5 questions
             return render_template('quiz_result.html', score=score)
 
         current_question += 1
