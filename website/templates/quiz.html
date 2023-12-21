@@ -22,10 +22,10 @@
                     </div>
                 {% endfor %}
             </div>
-            <input type="hidden" name="current_question" value="{{ current_question }}">
-            <input type="hidden" name="correct_answer" value="{{ correct_answer }}">
-            <input type="hidden" name="score" value="{{ score }}">
-            <input type="hidden" name="difficulty" value="{{ difficulty }}">
+            <!-- <input type="hidden" name="current_question" value="{{ current_question }}"> -->
+            <input type="text" name="correct_answer" value="{{ correct_answer }}">
+            <!-- <input type="hidden" name="score" value="{{ score }}"> -->
+            <input type="text" name="difficulty" value="{{ difficulty }}">
             <input type="hidden" name="time_taken" id="time-taken" value="">
 
             <!-- Display timer -->
