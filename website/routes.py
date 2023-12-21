@@ -48,14 +48,55 @@ def getMaterial(CourseId, LessonId):
 
     return render_template('material.html',data=data)
 
-@app.route('/quiz')
-def quiz():
-
+def get_questions():
     conn = db_conn()
     cur = conn.cursor()
-
-    select_query = f'''SELECT * FROM questionbank where lesson_id=1;'''
+    
+    select_query = f'''SELECT question,option1,option2,option3,option4,option5,correctanswer FROM questionbank;'''
     cur.execute(select_query)
-    data = cur.fetchall()
+    questions = cur.fetchall()
+    print(questions)
 
-    return render_template('quiz.html',data=data)
+    return questions
+
+# Flask route to render the quiz template
+@app.route('/quiz', methods=['GET', 'POST'])
+def quiz():
+    if request.method == 'POST':
+        current_question = int(request.form['current_question'])
+        user_answer = request.form['user_answer']
+        correct_answer = request.form['correct_answer']
+        score = int(request.form['score'])
+
+        if user_answer == 'Only conclusion 1 follows':
+            user_answer = 'A'
+        elif user_answer == 'Only conclusion 2 follows':
+            user_answer = 'B'
+        elif user_answer == 'Either 1 or 2 follows':
+            user_answer = 'C'
+        elif user_answer == 'Neither 1 nor 2 follows':
+            user_answer = 'D'
+        else:
+            user_answer - 'E'
+
+        if user_answer == correct_answer:
+            score += 1
+
+        if current_question == 5:  # Assuming there are 10 questions
+            return render_template('quiz_result.html', score=score)
+
+        current_question += 1
+
+    else:
+        current_question = 1
+        score = 0
+
+    questions = get_questions()
+    current_question_data = questions[current_question - 1]
+
+    return render_template('quiz.html',
+                           current_question=current_question,
+                           score=score,
+                           question=current_question_data[0],
+                           options=current_question_data[1:6],
+                           correct_answer=current_question_data[6])
