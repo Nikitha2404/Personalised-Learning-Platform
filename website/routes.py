@@ -48,41 +48,56 @@ def getMaterial(CourseId, LessonId):
 
     return render_template('material.html',data=data)
 
-def get_questions():
+def get_questions(LessonId):
     conn = db_conn()
     cur = conn.cursor()
     
-    select_query = f'''SELECT question,option1,option2,option3,option4,option5,correctanswer FROM questionbank;'''
+    select_query = f'''SELECT question,option1,option2,option3,option4,option5,correctanswer,difficulty FROM questionbank where lesson_id={LessonId};'''
     cur.execute(select_query)
     questions = cur.fetchall()
-    print(questions)
+    # print(questions)
 
     return questions
 
 # Flask route to render the quiz template
-@app.route('/quiz', methods=['GET', 'POST'])
-def quiz():
+@app.route('/courses/<int:CourseId>/lessons/<int:LessonId>/quiz', methods=['GET', 'POST'])
+def quiz(CourseId,LessonId):
     if request.method == 'POST':
         current_question = int(request.form['current_question'])
         user_answer = request.form['user_answer']
         correct_answer = request.form['correct_answer']
-        options = request.form['options']
         score = int(request.form['score'])
-
-        if user_answer == options[0]:
+        difficulty = request.form['difficulty']
+        print(user_answer)
+        if user_answer == request.form['option1']:
             user_answer = 'A'
-        elif user_answer == options[1]:
+        elif user_answer == request.form['option2']:
             user_answer = 'B'
-        elif user_answer == options[2]:
+        elif user_answer == request.form['option3']:
             user_answer = 'C'
-        elif user_answer == options[3]:
+        elif user_answer == request.form['option4']:
             user_answer = 'D'
         else:
             user_answer = 'E'
 
+        print(correct_answer,user_answer)
         if user_answer == correct_answer:
-            score += 1
+            if(difficulty == "easy"):
+                score += 1
+            elif(difficulty == "medium"):
+                score += 2
+            else:
+                score += 3
+        else:
+            if(difficulty == "easy"):
+                score -= 3
+            elif(difficulty == "medium"):
+                score -= 2
+            else:
+                score -= 1
+        print("Score:",score)
 
+        
         if current_question == 5:  # Assuming there are 5 questions
             return render_template('quiz_result.html', score=score)
 
@@ -92,7 +107,7 @@ def quiz():
         current_question = 1
         score = 0
 
-    questions = get_questions()
+    questions = get_questions(LessonId)
     current_question_data = questions[current_question - 1]
 
     return render_template('quiz.html',
@@ -100,4 +115,6 @@ def quiz():
                            score=score,
                            question=current_question_data[0],
                            options=current_question_data[1:6],
-                           correct_answer=current_question_data[6])
+                           correct_answer=current_question_data[6],
+                           difficulty=current_question_data[7],
+                           course_id=CourseId,lesson_id=LessonId)

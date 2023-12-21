@@ -15,7 +15,7 @@
 
 
 <div>
-<a href="/quiz"><button id="quiz-button">Take Quiz</button></a>
+<a href="{{ url_for('quiz', CourseId=data[0][4], LessonId=data[0][0]) }}"><button id="quiz-button">Take Quiz</button></a>
 </div>
 
 </body>
