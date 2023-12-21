@@ -68,7 +68,8 @@ def quiz(CourseId,LessonId):
         correct_answer = request.form['correct_answer']
         score = int(request.form['score'])
         difficulty = request.form['difficulty']
-        print(user_answer)
+        time_taken = request.form.get('time_taken')
+        print(user_answer," ",time_taken)
         if user_answer == request.form['option1']:
             user_answer = 'A'
         elif user_answer == request.form['option2']:
