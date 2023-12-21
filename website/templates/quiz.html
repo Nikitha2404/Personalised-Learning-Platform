@@ -17,17 +17,13 @@
                     <div class="option">
                         <input type="radio" name="user_answer" value="{{ option }}" required>
                         {{ option }}
+                        <input type="hidden" name="option{{ loop.index }}" value="{{ option }}">
                     </div>
                 {% endfor %}
             </div>
             <input type="hidden" name="current_question" value="{{ current_question }}">
             <input type="hidden" name="correct_answer" value="{{ correct_answer }}">
             <input type="hidden" name="score" value="{{ score }}">
-            <input type="hidden" name="option1" value="{{ options[0] }}">
-            <input type="hidden" name="option2" value="{{ options[1] }}">
-            <input type="hidden" name="option3" value="{{ options[2] }}">
-            <input type="hidden" name="option4" value="{{ options[3] }}">
-            <input type="hidden" name="option5" value="{{ options[4] }}">
             <input type="hidden" name="difficulty" value="{{ difficulty }}">
             <button type="submit">Submit Answer</button>
         </form>
